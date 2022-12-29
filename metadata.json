@@ -1,0 +1,31 @@
+{
+  "icon": "docker.svg",
+  "ui": {
+    "dashboard-tab": {
+      "title": "Kubescape",
+      "src": "index.html",
+      "root": "ui"
+    }
+  },
+  "host": {
+    "binaries": [
+      {
+        "darwin": [
+          {
+            "path": "/darwin/helm"
+          }
+        ],
+        "linux": [
+          {
+            "path": "/linux/helm"
+          }
+        ],
+        "windows": [
+          {
+            "path": "/windows/helm.exe"
+          }
+        ]
+      }
+    ]
+  }
+}
