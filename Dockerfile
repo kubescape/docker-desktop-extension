@@ -49,5 +49,5 @@ RUN curl -L -o "helm-windows.tgz" "https://get.helm.sh/helm-v3.10.3-windows-amd6
     && chmod +x ./helm.exe && mv ./helm.exe /windows
 
 COPY metadata.json .
-COPY docker.svg .
+COPY kubescape-logo.svg .
 COPY --from=client-builder /ui/build ui

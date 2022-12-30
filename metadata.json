@@ -1,5 +1,5 @@
 {
-  "icon": "docker.svg",
+  "icon": "kubescape-logo.svg",
   "ui": {
     "dashboard-tab": {
       "title": "Kubescape",
