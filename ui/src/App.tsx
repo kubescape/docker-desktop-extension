@@ -73,7 +73,7 @@ const SignUpPage = (props: PageProps) => {
   return (
     <>
       <Typography>
-        To help you elevate the security of your Kubernetes cluster and provide you with the best insights, we need to connect to your Kubescape Cloud account. If you don’t have one yet, press the “Sign Up” button below and create the account by following the instructions. If you already have an account, feel free to jump to the next step.
+        To help you elevate the security of your Kubernetes cluster and provide you with the best insights, we need to connect to your ARMO Cloud account. If you don’t have one yet, press the “Sign Up” button below and create the account by following the instructions. If you already have an account, feel free to jump to the next step.
       </Typography>
       <Stack direction="row" justifyContent="flex-end" sx={{ mt: 2 }}>
         <Button variant="outlined" onClick={openKubescapeSignup}>
@@ -121,7 +121,7 @@ const SecurePage = (props: PageProps) => {
   return (
     <>
       <Typography>
-        Before Kubescape can help you secure your cluster, please first make sure that the cluster is running. Once your cluster is ready, Kubescape needs your Kubescape Cloud Account ID to deploy. To get the Account ID, log into Kubescape Cloud, click on your Account icon, press the “Copy” button next to your Account ID to copy the Account ID, paste it into the input and then deploy Kubescape.
+        Before Kubescape can help you secure your cluster, please first make sure that the cluster is running. Once your cluster is ready, Kubescape needs your ARMO Cloud Account ID to deploy. To get the Account ID, log into ARMO Cloud, click on your Account icon, press the “Copy” button next to your Account ID to copy the Account ID, paste it into the input and then deploy Kubescape.
       </Typography>
 
       <Grid container direction="row" justifyContent="space-between" alignItems="bottom" spacing={2}>
@@ -160,7 +160,7 @@ const MonitorPage = () => {
   return (
     <>
       <Typography>
-        Now that Kubescape has been successfully deployed in your cluster, take a look at your Kubescape Cloud dashboard to check how secure is your cluster and what you can do to improve your security posture.
+        Now that Kubescape has been successfully deployed in your cluster, take a look at your ARMO Cloud dashboard to check how secure is your cluster and what you can do to improve your security posture.
       </Typography>
       <Stack direction="row" justifyContent="flex-end">
         <Button onClick={openDashboard}>
