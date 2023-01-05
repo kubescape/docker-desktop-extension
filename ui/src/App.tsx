@@ -2,7 +2,7 @@ import React, { ChangeEvent, useState, ComponentType } from "react";
 import { createDockerDesktopClient } from "@docker/extension-api-client";
 import { LoadingButton } from "@mui/lab";
 import {
-  Box, Container, Stepper, Step, StepLabel, Button, Grid, Stack, Alert, Snackbar, TextField, Typography, Paper
+  FormControl, FormControlLabel, List, ListItem, FormLabel, Radio, RadioGroup, Box, Container, Stepper, Step, StepLabel, Button, Grid, Stack, Alert, Snackbar, TextField, Typography, Paper, Link, ListItemProps, ListProps
 } from "@mui/material";
 import PolicyIcon from "@mui/icons-material/Policy";
 import GppGoodIcon from "@mui/icons-material/GppGood";
@@ -65,6 +65,51 @@ const Page = (props: GenericPageProps) => {
   )
 }
 
+const SelectHostingProviderPage = (props: PageProps) => {
+  const [platformSelected, setPlatformSelected] = useState<boolean>(false);
+
+  const hostingProviders = [
+    { value: "armo", label: "ARMO Platform", id: 1, disabled: false },
+    { value: "backstage", label: "Backstage (coming soon)", id: 2, disabled: true },
+    { value: "grafana", label: "Grafana (coming soon)", id: 3, disabled: true },
+    { value: "selfHosted", label: "Self-hosted backend (coming soon)", id: 4, disabled: true },
+  ]
+
+  const handlePlatformChanged = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.currentTarget.value === hostingProviders[0].value) {
+      setPlatformSelected(true)
+    } else {
+      setPlatformSelected(false)
+    }
+  }
+
+  props.setNextAvailable(platformSelected)
+  return (
+    <>
+      <Stack direction="column" spacing={2}>
+        <Typography>
+          Please select your hosting provider.
+        </Typography>
+        <FormControl>
+          <FormLabel id="radio-buttons-group-label">Hosting Provider</FormLabel>
+          <RadioGroup
+            aria-labelledby="radio-buttons-group-label"
+            defaultValue="female"
+            name="radio-buttons-group"
+            onChange={handlePlatformChanged}
+          >
+            {
+              hostingProviders.map((item) => {
+                return <FormControlLabel key={item.id} disabled={item.disabled} value={item.value} control={<Radio />} label={item.label} />
+              })
+            }
+          </RadioGroup>
+        </FormControl>
+      </Stack>
+    </>
+  )
+}
+
 const SignUpPage = (props: PageProps) => {
   const openKubescapeSignup = () => {
     client.host.openExternal(kubescapeSignupURL)
@@ -72,8 +117,11 @@ const SignUpPage = (props: PageProps) => {
 
   return (
     <>
-      <Typography>
-        To help you elevate the security of your Kubernetes cluster and provide you with the best insights, we need to connect to your ARMO Platform account. If you don’t have one yet, press the “Sign Up” button below and create the account by following the instructions. If you already have an account, feel free to jump to the next step.
+      <Typography paragraph>
+        To help you harden your Kubernetes cluster and provide you with the best insights, we need to connect to your ARMO platform account. If you don’t have one yet, press the “Sign Up” button below and create the account by following the instructions.
+      </Typography>
+      <Typography paragraph>
+        If you already have an ARMO Platform account, click <Link onClick={props.nextFn}>Next</Link>.
       </Typography>
       <Stack direction="row" justifyContent="flex-end" sx={{ mt: 2 }}>
         <Button variant="outlined" onClick={openKubescapeSignup}>
@@ -82,6 +130,14 @@ const SignUpPage = (props: PageProps) => {
       </Stack>
     </>
   )
+}
+
+const NumberedList = (props: ListProps) => {
+  return <List {...props} sx={{ listStyle: "decimal", pl: 2 }}></List>
+}
+
+const OrderedListItem = (props: ListItemProps) => {
+  return <ListItem {...props} sx={{ display: "list-item", pt: 0, pb: 0 }} disablePadding />
 }
 
 const SecurePage = (props: PageProps) => {
@@ -120,8 +176,14 @@ const SecurePage = (props: PageProps) => {
 
   return (
     <>
-      <Typography>
-        Before Kubescape can help you secure your cluster, please first make sure that the cluster is running. Once your cluster is ready, Kubescape needs your ARMO Platform Account ID to deploy. To get the Account ID, log into ARMO Platform, click on your Account dropdown, press the “Copy” button next to your Account ID to copy the Account ID, paste it into the input and then deploy Kubescape.
+      <Typography paragraph>
+        The following steps will allow Kubescape to help you harden your Kubernetes cluster:
+        <NumberedList>
+          <OrderedListItem>Make sure your Kubernetes cluster is running.</OrderedListItem>
+          <OrderedListItem>Enter your ARMO platform account ID.</OrderedListItem>
+          <OrderedListItem>To get your account ID, log into ARMO Platform, click on "Your account" icon and click the "Copy" icon next to your Account ID</OrderedListItem>
+          <OrderedListItem>Paste the input below and press on the “Secure with Kubescape” button to deploy Kubescape and secure your cluster.</OrderedListItem>
+        </NumberedList>
       </Typography>
 
       <Grid container direction="row" justifyContent="space-between" alignItems="bottom" spacing={2}>
@@ -172,6 +234,11 @@ const MonitorPage = () => {
 }
 
 const steps = [
+  {
+    label: "Select Provider",
+    optional: false,
+    payload: SelectHostingProviderPage,
+  },
   {
     label: "Sign Up",
     optional: true,
