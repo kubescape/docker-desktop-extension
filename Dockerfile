@@ -1,3 +1,5 @@
+#syntax=docker/dockerfile:1.3-labs
+
 FROM --platform=$BUILDPLATFORM node:18.3.0-alpine3.16 AS client-builder
 
 WORKDIR /ui
@@ -14,6 +16,40 @@ RUN --mount=type=cache,target=/usr/src/app/.npm \
 COPY ui /ui
 RUN npm run build
 
+# Download binaries for supported platforms and architectures
+FROM alpine as binary-downloader
+ARG TARGETARCH
+
+RUN apk add curl
+
+# Install Helm
+RUN curl -L -o "helm-linux.tgz" "https://get.helm.sh/helm-v3.10.3-linux-${TARGETARCH}.tar.gz" \
+    && mkdir -p /host-binaries/linux \
+    && ls . \
+    # Extract only the executable file to CWD without any directory structures
+    && tar xzf "helm-linux.tgz" --strip-components=1 linux-${TARGETARCH}/helm \
+    && chmod +x ./helm \
+    && mv ./helm /host-binaries/linux \
+    && ls .
+
+RUN curl -L -o "helm-darwin.tgz" "https://get.helm.sh/helm-v3.10.3-darwin-${TARGETARCH}.tar.gz" \
+    && mkdir -p /host-binaries/darwin \
+    && tar xzf "helm-darwin.tgz" --strip-components=1 darwin-${TARGETARCH}/helm \
+    && chmod +x ./helm \
+    && mv ./helm /host-binaries/darwin
+
+# Since Windows binaries are only available on `amd64`, download them only if
+# `TARGETARCH` is `amd64`
+RUN <<EOT ash
+    if [ "amd64" = "$TARGETARCH" ]; then
+      curl -L -o "helm-windows.tgz" "https://get.helm.sh/helm-v3.10.3-windows-${TARGETARCH}.tar.gz"
+      mkdir -p /host-binaries/windows
+      tar xzf "helm-windows.tgz" --strip-components=1 windows-${TARGETARCH}/helm.exe
+      chmod +x ./helm.exe
+      mv ./helm.exe /host-binaries/windows
+    fi
+EOT
+
 FROM alpine
 LABEL org.opencontainers.image.title="Kubescape" \
     org.opencontainers.image.description="Secure your Kubernetes cluster and gain insight into your cluster’s security posture via an easy-to-use online dashboard." \
@@ -29,27 +65,7 @@ LABEL org.opencontainers.image.title="Kubescape" \
     com.docker.extension.account-info="required" \
     com.docker.extension.categories="kubernetes"
 
-RUN apk add curl
-
-# Install Helm
-RUN curl -L -o "helm-linux.tgz" "https://get.helm.sh/helm-v3.10.3-linux-amd64.tar.gz" \
-    && mkdir -p /linux \
-    && ls . \
-    # Extract only the executable file to CWD without any directory structures
-    && tar xzf "helm-linux.tgz" --strip-components=1 linux-amd64/helm \
-    && chmod +x ./helm && mv ./helm /linux \
-    && ls .
-
-RUN curl -L -o "helm-darwin.tgz" "https://get.helm.sh/helm-v3.10.3-darwin-amd64.tar.gz" \
-    && mkdir -p /darwin \
-    && tar xzf "helm-darwin.tgz" --strip-components=1 darwin-amd64/helm \
-    && chmod +x ./helm && mv ./helm /darwin
-
-RUN curl -L -o "helm-windows.tgz" "https://get.helm.sh/helm-v3.10.3-windows-amd64.tar.gz" \
-    && mkdir -p /windows \
-    && tar xzf "helm-windows.tgz" --strip-components=1 windows-amd64/helm.exe \
-    && chmod +x ./helm.exe && mv ./helm.exe /windows
-
 COPY metadata.json .
 COPY kubescape-logo.svg .
 COPY --from=client-builder /ui/build ui
+COPY --from=binary-downloader /host-binaries/ /
