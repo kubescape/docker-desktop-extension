@@ -222,7 +222,7 @@ const MonitorPage = () => {
   return (
     <>
       <Typography>
-        Now that Kubescape has been successfully deployed in your cluster, take a look at your ARMO Platform dashboard to check how secure is your cluster and what you can do to improve your security posture.
+        Open the ARMO Platform dashboard to check how secure your cluster is and see suggestions for improving your security posture.
       </Typography>
       <Stack direction="row" justifyContent="flex-end">
         <Button onClick={openDashboard}>
