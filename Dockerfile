@@ -63,7 +63,7 @@ LABEL org.opencontainers.image.title="Kubescape" \
     com.docker.extension.additional-urls="" \
     com.docker.extension.changelog="" \
     com.docker.extension.account-info="required" \
-    com.docker.extension.categories="kubernetes"
+    com.docker.extension.categories="kubernetes,security"
 
 COPY metadata.json .
 COPY kubescape-logo.svg .
