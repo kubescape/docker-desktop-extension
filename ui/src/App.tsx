@@ -49,13 +49,15 @@ type GenericPageProps = PageProps & {
   component: ComponentType<PageProps>
 }
 
-const Page = (props: GenericPageProps) => {
-  const SpecificPage = props.component
-
+const initNavbarState = (props: PageProps) => {
   // “Back" button is available by default for all pages, except the initial
   props.setBackAvailable(!props.initial)
   // "Next” is available by defautl only for the optional pages
   props.setNextAvailable(props.optional)
+}
+
+const Page = (props: GenericPageProps) => {
+  const SpecificPage = props.component
 
   const { component: _, ...specificProps } = props
 
@@ -84,7 +86,12 @@ const SelectHostingProviderPage = (props: PageProps) => {
     }
   }
 
-  props.setNextAvailable(platformSelected)
+  useEffect(() => {
+    initNavbarState(props)
+
+    props.setNextAvailable(platformSelected)
+  })
+
   return (
     <>
       <Stack direction="column" spacing={2}>
@@ -115,6 +122,10 @@ const SignUpPage = (props: PageProps) => {
   const openKubescapeSignup = () => {
     client.host.openExternal(kubescapeSignupURL)
   }
+
+  useEffect(() => {
+    initNavbarState(props)
+  })
 
   return (
     <>
@@ -173,7 +184,11 @@ const SecurePage = (props: PageProps) => {
     props.onKubescapeDeploy()
   }
 
-  props.setNextAvailable(kubescapeDeployed)
+  useEffect(() => {
+    initNavbarState(props)
+    props.setNextAvailable(kubescapeDeployed)
+  })
+
 
   return (
     <>
