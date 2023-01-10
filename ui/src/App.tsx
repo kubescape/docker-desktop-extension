@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState, ComponentType } from "react";
+import React, { ChangeEvent, useState, useEffect, ComponentType } from "react";
 import { createDockerDesktopClient } from "@docker/extension-api-client";
 import { LoadingButton } from "@mui/lab";
 import {
@@ -11,6 +11,7 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 
 import {
   deployKubescapeHelm,
+  isKubescapeDeployed,
 } from "./helper/kubernetes";
 
 const snackbarDuration = 5000;
@@ -251,7 +252,11 @@ const steps = [
   },
 ];
 
-function HorizontalLinearStepper() {
+type HorizontalLinearStepperProps = {
+  kubescapeAlreadyDeployed: boolean
+}
+
+const HorizontalLinearStepper = (props: HorizontalLinearStepperProps) => {
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set<number>());
 
@@ -301,6 +306,12 @@ function HorizontalLinearStepper() {
   const getStep = (step: number) => steps[step];
 
   const flowCompleted = (step: number) => step === steps.length;
+
+  useEffect(() => {
+    if (props.kubescapeAlreadyDeployed) {
+      setActiveStep(steps.length)
+    }
+  }, [props.kubescapeAlreadyDeployed])
 
   return (
     <>
@@ -385,6 +396,18 @@ function HorizontalLinearStepper() {
 }
 
 export function App() {
+  const ddClient = useDockerDesktopClient()
+
+  const [kubescapeAlreadyDeployed, setKubescapeAlreadyDeployed] = useState<boolean>(false);
+
+  useEffect(() => {
+    const setKSDeployed = async () => {
+      setKubescapeAlreadyDeployed(await isKubescapeDeployed(ddClient))
+    }
+
+    setKSDeployed()
+  }, [ddClient])
+
   return (
     <Container maxWidth="md">
       <Grid container justifyContent="center">
@@ -399,7 +422,7 @@ export function App() {
         </Grid>
       </Grid>
 
-      <HorizontalLinearStepper />
+      <HorizontalLinearStepper kubescapeAlreadyDeployed={kubescapeAlreadyDeployed} />
 
     </Container>
   );
