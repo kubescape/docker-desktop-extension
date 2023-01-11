@@ -152,7 +152,7 @@ const OrderedListItem = (props: ListItemProps) => {
   return <ListItem {...props} sx={{ display: "list-item", pt: 0, pb: 0 }} disablePadding />
 }
 
-const SecurePage = (props: PageProps) => {
+const DeployPage = (props: PageProps) => {
   const [accountID, setAccountID] = useState<string>("");
 
   const [accountIDInvalid, setAccountIDInvalid] = useState<boolean>(true);
@@ -198,7 +198,7 @@ const SecurePage = (props: PageProps) => {
           <OrderedListItem>Make sure your Kubernetes cluster is running.</OrderedListItem>
           <OrderedListItem>Enter your ARMO platform account ID.</OrderedListItem>
           <OrderedListItem>To get your account ID, log into ARMO Platform, click on "Your account" icon and click the "Copy" icon next to your Account ID</OrderedListItem>
-          <OrderedListItem>Paste the input below and press on the “Secure with Kubescape” button to deploy Kubescape and secure your cluster.</OrderedListItem>
+          <OrderedListItem>Paste the input below and press on the “Deploy Kubescape” button to deploy Kubescape and secure your cluster.</OrderedListItem>
         </NumberedList>
       </Typography>
 
@@ -223,7 +223,7 @@ const SecurePage = (props: PageProps) => {
             variant="contained"
             onClick={handleDeployRequest}
           >
-            {kubescapeDeployed ? "Secured" : "Secure with Kubescape"}
+            {kubescapeDeployed ? "Deployed" : "Deploy Kubescape"}
           </LoadingButton>
         </Grid>
       </Grid>
@@ -261,9 +261,9 @@ const steps = [
     payload: SignUpPage,
   },
   {
-    label: "Secure",
+    label: "Deploy",
     optional: false,
-    payload: SecurePage,
+    payload: DeployPage,
   },
 ];
 
