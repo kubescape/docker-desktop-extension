@@ -16,8 +16,8 @@ import {
 
 const snackbarDuration = 5000;
 
-const kubescapeSignupURL = "https://cloud.armosec.io/account/sign-up"
-const kubescapeDashboardURL = "https://cloud.armosec.io/dashboard"
+const kubescapeSignupURL = "https://cloud.armosec.io/account/sign-up?utm_medium=extension&utm_source=docker"
+const kubescapeDashboardURL = "https://cloud.armosec.io/dashboard?utm_medium=extension&utm_source=docker"
 
 const uuidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/
 const invalidUUIDMessage = "Input is not a valid Account ID."
