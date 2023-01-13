@@ -26,6 +26,8 @@ const invalidUUIDMessage = "Input is not a valid Account ID."
 // If you're running this React app in a browser, it won't work properly.
 const client = createDockerDesktopClient();
 
+const verticalSpacing = 2;
+
 function useDockerDesktopClient() {
   return client;
 }
@@ -94,7 +96,7 @@ const SelectHostingProviderPage = (props: PageProps) => {
 
   return (
     <>
-      <Stack direction="column" spacing={2}>
+      <Stack direction="column" spacing={verticalSpacing}>
         <Typography>
           Please select your hosting provider.
         </Typography>
@@ -202,7 +204,7 @@ const DeployPage = (props: PageProps) => {
         </NumberedList>
       </Typography>
 
-      <Grid container direction="row" justifyContent="space-between" alignItems="bottom" spacing={2}>
+      <Grid container direction="row" justifyContent="space-between" alignItems="bottom" spacing={verticalSpacing}>
         <Grid item xs={6}>
           <TextField
             fullWidth={true}
@@ -237,13 +239,15 @@ const MonitorPage = () => {
   }
   return (
     <>
-      <Typography>
-        Open the ARMO Platform dashboard to check how secure your cluster is and see suggestions for improving your security posture.
-      </Typography>
-      <Stack direction="row" justifyContent="flex-end">
-        <Button onClick={openDashboard}>
-          Open Dashboard
-        </Button>
+      <Stack direction="column" spacing={verticalSpacing}>
+        <Typography>
+          Open the ARMO Platform dashboard to check how secure your cluster is and see suggestions for improving your security posture.
+        </Typography>
+        <Stack direction="row" justifyContent="flex-end">
+          <Button onClick={openDashboard}>
+            Open Dashboard
+          </Button>
+        </Stack>
       </Stack>
     </>
   )
