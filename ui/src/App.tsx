@@ -96,7 +96,7 @@ const SelectHostingProviderPage = (props: PageProps) => {
 
   return (
     <>
-      <Stack direction="column" spacing={verticalSpacing}>
+      <Stack direction="column">
         <Typography paragraph>
           The Docker Desktop extension for Kubescape adds the Kubescape cluster components to your Kubernetes environment. This operator
           will regularly scan the security posture of your cluster, and enable scanning of container repositories and source code registries.
