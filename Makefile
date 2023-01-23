@@ -1,4 +1,4 @@
-IMAGE?=kubescape/docker-desktop-extension
+IMAGE?=vklokun/docker-desktop-extension
 TAG?=latest
 
 BUILDER=buildx-multi-arch
