@@ -53,7 +53,7 @@ EOT
 FROM alpine
 LABEL org.opencontainers.image.title="Kubescape" \
     org.opencontainers.image.description="Secure your Kubernetes cluster and gain insight into your cluster’s security posture via an easy-to-use online dashboard." \
-    org.opencontainers.image.vendor="Kubescape" \
+    org.opencontainers.image.vendor="ARMO" \
     org.opencontainers.image.licenses="Apache-2.0" \
     com.docker.desktop.extension.icon="https://raw.githubusercontent.com/cncf/artwork/ec3936fa0256c768b538247d20f130d293a9faed/projects/kubescape/stacked/color/kubescape-stacked-color.svg" \
     com.docker.desktop.extension.api.version=">= 0.2.3" \
