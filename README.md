@@ -1,9 +1,9 @@
-# Kubescape Extension
+# Kubescape Docker Desktop extension
 
 This is a Docker Desktop extension for Kubescape.
-It lets you secure your Kubernetes cluster by scanning it for misconfigurations and vulnerabilities.
+It lets you improve the security of your Kubernetes cluster by scanning it for misconfigurations and vulnerabilities.
 
-To use the extension, just type in your ARMO Cloud Account ID , deploy Kubescape and review the results in the Dashboard.
+For now, the extension supports visualising your results using the ARMO Platform dashboard. Support for Backstage, Grafana and the self-hosted Kubescape backend are on our roadmap.
 
 ## Using the development version
 

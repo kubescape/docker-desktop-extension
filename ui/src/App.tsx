@@ -97,8 +97,16 @@ const SelectHostingProviderPage = (props: PageProps) => {
   return (
     <>
       <Stack direction="column" spacing={verticalSpacing}>
-        <Typography>
-          Please select your hosting provider.
+        <Typography paragraph>
+          The Docker Desktop extension for Kubescape adds the Kubescape cluster components to your Kubernetes environment. This operator
+          will regularly scan the security posture of your cluster, and enable scanning of container repositories and source code registries.
+        </Typography>
+        <Typography paragraph>
+          This version of the extension supports the ARMO Platform, a hosted backend for Kubescape. Future versions will include support for
+          frontends including Backstage, Grafana, and a locally-hosted instance of the Kubescape backend.
+        </Typography>
+        <Typography paragraph>
+          Please select your hosting provider:
         </Typography>
         <FormControl>
           <FormLabel id="radio-buttons-group-label">Hosting Provider</FormLabel>
@@ -132,7 +140,7 @@ const SignUpPage = (props: PageProps) => {
   return (
     <>
       <Typography paragraph>
-        To help you harden your Kubernetes cluster and provide you with the best insights, we need to connect to your ARMO platform account. If you don’t have one yet, press the “Sign Up” button below and create the account by following the instructions.
+        To help you harden your Kubernetes cluster and provide you with the best insights, we need to connect to your ARMO Platform account. If you don’t have one yet, press the “Sign Up” button below and create an account by following the instructions.
       </Typography>
       <Typography paragraph>
         If you already have an ARMO Platform account, click <Link onClick={props.nextFn}>Next</Link>.
@@ -198,9 +206,8 @@ const DeployPage = (props: PageProps) => {
         The following steps will allow Kubescape to help you harden your Kubernetes cluster:
         <NumberedList>
           <OrderedListItem>Make sure your Kubernetes cluster is running.</OrderedListItem>
-          <OrderedListItem>Enter your ARMO platform account ID.</OrderedListItem>
           <OrderedListItem>To get your account ID, log into ARMO Platform, click on "Your account" icon and click the "Copy" icon next to your Account ID</OrderedListItem>
-          <OrderedListItem>Paste the input below and press on the “Deploy Kubescape” button to deploy Kubescape and secure your cluster.</OrderedListItem>
+          <OrderedListItem>Paste the ID below and press the “Deploy Kubescape” button to deploy Kubescape and secure your cluster.</OrderedListItem>
         </NumberedList>
       </Typography>
 
@@ -212,7 +219,7 @@ const DeployPage = (props: PageProps) => {
             variant="standard"
             onChange={handleTextChange}
             helperText={accountIDInvalid && accountIDValidationText}
-            label="Your Kubescape Account ID"
+            label="Your ARMO Platform Account ID"
           />
         </Grid>
         <Grid item>
@@ -241,7 +248,7 @@ const MonitorPage = () => {
     <>
       <Stack direction="column" spacing={verticalSpacing}>
         <Typography>
-          Open the ARMO Platform dashboard to check how secure your cluster is and see suggestions for improving your security posture.
+          Open the ARMO Platform dashboard to check for vulnerabilities in your cluster and see suggestions for improving your security posture.
         </Typography>
         <Stack direction="row" justifyContent="flex-end">
           <Button onClick={openDashboard}>
