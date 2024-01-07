@@ -20,7 +20,7 @@ const kubescapeSignupURL = "https://cloud.armosec.io/account/sign-up?utm_medium=
 const kubescapeDashboardURL = "https://cloud.armosec.io/dashboard?utm_medium=extension&utm_source=docker"
 
 const uuidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/
-const invalidUUIDMessage = "Input is not a valid Account ID."
+const invalidUUIDMessage = "Input is not a valid UUID"
 
 // Note: This line relies on Docker Desktop's presence as a host application.
 // If you're running this React app in a browser, it won't work properly.
@@ -163,21 +163,36 @@ const OrderedListItem = (props: ListItemProps) => {
 }
 
 const DeployPage = (props: PageProps) => {
-  const [accountID, setAccountID] = useState<string>("");
+  const [accessKey, setAccessKey] = useState<string>("")
+  const [accessKeyInvalid, setAccessKeyInvalid] = useState<boolean>(true)
+  const [accessKeyValidationText, setAccessKeyValidationText] = useState<string>("")
 
-  const [accountIDInvalid, setAccountIDInvalid] = useState<boolean>(true);
-  const [accountIDValidationText, setAccountIDValidationText] = useState<string>("");
+  const [accountID, setAccountID] = useState<string>("")
+  const [accountIDInvalid, setAccountIDInvalid] = useState<boolean>(true)
+  const [accountIDValidationText, setAccountIDValidationText] = useState<string>("")
 
-  const [deployingKubescape, setDeployingKubescape] = useState<boolean>(false);
-  const [kubescapeDeployed, setKubescapeDeployed] = useState<boolean>(false);
+  const [deployingKubescape, setDeployingKubescape] = useState<boolean>(false)
+  const [kubescapeDeployed, setKubescapeDeployed] = useState<boolean>(false)
 
   const ddClient = useDockerDesktopClient();
 
-  const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleAccessKeyTextChange = (event: ChangeEvent<HTMLInputElement>) => {
     let inputValue = event.currentTarget.value.toLowerCase()
+    setAccessKey(inputValue)
+
+    if (uuidRegex.test(inputValue)) {
+      setAccessKeyInvalid(false)
+    } else {
+      setAccessKeyValidationText(invalidUUIDMessage)
+      setAccessKeyInvalid(true)
+    }
+  }
+
+  const handleAccountIdTextChange = (event: ChangeEvent<HTMLInputElement>) => {
+    let inputValue = event.currentTarget.value.toLowerCase()
+    setAccountID(inputValue)
     if (uuidRegex.test(inputValue)) {
       setAccountIDInvalid(false)
-      setAccountID(inputValue)
     } else {
       setAccountIDValidationText(invalidUUIDMessage)
       setAccountIDInvalid(true)
@@ -186,7 +201,7 @@ const DeployPage = (props: PageProps) => {
 
   const handleDeployRequest = async () => {
     setDeployingKubescape(true)
-    await deployKubescapeHelm(ddClient, accountID)
+    await deployKubescapeHelm(ddClient, accountID, accessKey)
     setDeployingKubescape(false)
 
     setKubescapeDeployed(true)
@@ -207,19 +222,32 @@ const DeployPage = (props: PageProps) => {
         <NumberedList>
           <OrderedListItem>Make sure your Kubernetes cluster is running.</OrderedListItem>
           <OrderedListItem>To get your account ID, log into ARMO Platform, click on "Your account" icon and click the "Copy" icon next to your Account ID</OrderedListItem>
+          <OrderedListItem>To obtain an access key, log into ARMO Platform. In the lower-left corner, click on "Settings". In the sidebar, click on "Agent Access Keys". Follow the steps to add a new access key or copy an existing one.</OrderedListItem>
           <OrderedListItem>Paste the ID below and press the “Deploy Kubescape” button to deploy Kubescape and secure your cluster.</OrderedListItem>
         </NumberedList>
       </Typography>
 
-      <Grid container direction="row" justifyContent="space-between" alignItems="bottom" spacing={verticalSpacing}>
-        <Grid item xs={6}>
+      <Grid container direction="column" justifyContent="space-between" alignItems="bottom" spacing={verticalSpacing}>
+        <Grid item>
           <TextField
             fullWidth={true}
             error={accountIDInvalid}
-            variant="standard"
-            onChange={handleTextChange}
+            variant="outlined"
+            value={accountID}
+            onChange={handleAccountIdTextChange}
             helperText={accountIDInvalid && accountIDValidationText}
             label="Your ARMO Platform Account ID"
+          />
+        </Grid>
+        <Grid item>
+          <TextField
+            fullWidth={true}
+            error={accessKeyInvalid}
+            variant="outlined"
+            onChange={handleAccessKeyTextChange}
+            value={accessKey}
+            helperText={accessKeyInvalid && accessKeyValidationText}
+            label="Your ARMO Platform Agent Access Key"
           />
         </Grid>
         <Grid item>
@@ -228,7 +256,7 @@ const DeployPage = (props: PageProps) => {
             loading={deployingKubescape}
             loadingPosition="end"
             endIcon={kubescapeDeployed ? <GppGoodIcon /> : <PolicyIcon />}
-            disabled={accountIDInvalid || kubescapeDeployed}
+            disabled={accountIDInvalid || accessKeyInvalid || kubescapeDeployed}
             variant="contained"
             onClick={handleDeployRequest}
           >
