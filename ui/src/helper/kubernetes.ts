@@ -6,7 +6,8 @@ export const IsK8sEnabled = "isK8sEnabled";
 
 const kubescapeReleaseName = "kubescape"
 
-export const deployKubescapeHelm = async (ddClient: v1.DockerDesktopClient, accountID: string) => {
+export const deployKubescapeHelm = async (ddClient: v1.DockerDesktopClient, accountID: string, accessKey: string) => {
+
   let output = await ddClient.extension.host?.cli.exec("helm", ["version"]);
   console.log(output);
 
@@ -23,11 +24,13 @@ export const deployKubescapeHelm = async (ddClient: v1.DockerDesktopClient, acco
   output = await ddClient.extension.host?.cli.exec(
     "helm", [
     "upgrade",
-    "--install", "kubescape", "kubescape/kubescape-cloud-operator",
+    "--install", "kubescape", "kubescape/kubescape-operator",
     "-n", "kubescape",
     "--create-namespace",
     "--set", `account=${accountID}`,
+    "--set", `accessKey=${accessKey}`,
     "--set", "clusterName=`kubectl config current-context`",
+    "--set", "server=api.armosec.io",
   ]
   )
   console.log(output)
