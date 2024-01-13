@@ -61,7 +61,7 @@ LABEL org.opencontainers.image.title="Kubescape" \
     com.docker.extension.detailed-description="<h1>Kubescape Extension for Docker Desktop</h1> <p>Kubescape helps harden your Kubernetes cluster by providing insight into your cluster's security posture. Some of the features that help you achieve this are - regular configuration and image scans, visualizing your RBAC rules and suggesting automatic fixes where applicable. </p> <p> The Kubescape Extension for Docker Desktop works by installing the Kubescape in-cluster components, connecting them to ARMO Platform and providing insights into the Kubernetes cluster deployed by Docker Desktop via the dashboard on ARMO Platform." \
     com.docker.extension.publisher-url="https://cloud.armosec.io/" \
     com.docker.extension.additional-urls="" \
-    com.docker.extension.changelog="" \
+    com.docker.extension.changelog="<p>Extension changelog<ul> <li>Support access key required by ARMO platform</li><li>Update Kubescape helm chart name</li></ul></p>" \
     com.docker.extension.account-info="required" \
     com.docker.extension.categories="kubernetes,security"
 
